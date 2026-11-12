@@ -7,6 +7,22 @@
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -40px 0px' });
     els.forEach(function (el) { if (el.getBoundingClientRect().top < innerHeight) return; el.classList.add('rv'); io.observe(el); });   // above the fold: visible at once
   }
+  // language: remember a manual choice; on deep pages only SUGGEST the saved language (never redirect)
+  var here = (document.documentElement.getAttribute('lang') || 'en').toLowerCase();
+  document.querySelectorAll('.langs a[lang]').forEach(function (a) {
+    a.addEventListener('click', function () { try { localStorage.setItem('bql_lang', a.getAttribute('lang').toLowerCase()); } catch (e) {} });
+  });
+  var pref = null; try { pref = localStorage.getItem('bql_lang'); } catch (e) {}
+  var NAMES = { en: 'English', fa: 'فارسی', de: 'Deutsch', fr: 'Français', es: 'Español', pt: 'Português', tr: 'Türkçe', 'zh-cn': '简体中文' };
+  var dismissed = false; try { dismissed = sessionStorage.getItem('bql_hint_off') === '1'; } catch (e) {}
+  if (pref && NAMES[pref] && pref !== here && !dismissed && /\/[a-z-]{2,5}\//.test(location.pathname)) {
+    var target = location.pathname.replace(/\/(en|fa|de|fr|es|pt|tr|zh-cn)\//, '/' + pref + '/');
+    var bar = document.createElement('div'); bar.className = 'langhint'; bar.setAttribute('dir', pref === 'fa' ? 'rtl' : 'ltr');
+    bar.innerHTML = '<a href="' + target + '" lang="' + pref + '">' + NAMES[pref] + ' →</a><button type="button" aria-label="close">×</button>';
+    bar.querySelector('a').addEventListener('click', function () { try { localStorage.setItem('bql_lang', pref); } catch (e) {} });
+    bar.querySelector('button').addEventListener('click', function () { bar.remove(); try { sessionStorage.setItem('bql_hint_off', '1'); } catch (e) {} });
+    document.body.appendChild(bar);
+  }
   // search (academy page)
   var q = document.getElementById('q'), out = document.getElementById('qr'), idx = null;
   if (q) {

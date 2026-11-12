@@ -1,1 +1,28 @@
-<!doctype html><meta charset="utf-8"><title>BEHROUZI QUANT LAB</title><script>var l=(navigator.language||"en").toLowerCase(),m={fa:"fa",de:"de",fr:"fr",es:"es",pt:"pt",tr:"tr",zh:"zh-cn"},k=l.slice(0,2);location.replace((m[k]||"en")+"/index.html")</script><a href="en/index.html">English</a> · <a href="fa/index.html">فارسی</a>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BEHROUZI QUANT LAB</title><meta name="description" content="BEHROUZI QUANT LAB — quantitative trading technology: BQL Divergence Intelligence for MetaTrader 5, academy, research and magazine."><link rel="canonical" href="https://behrouziquantlab.github.io/en/index.html"><link rel="alternate" hreflang="en" href="https://behrouziquantlab.github.io/en/index.html"><link rel="alternate" hreflang="fa" href="https://behrouziquantlab.github.io/fa/index.html"><link rel="alternate" hreflang="de" href="https://behrouziquantlab.github.io/de/index.html"><link rel="alternate" hreflang="fr" href="https://behrouziquantlab.github.io/fr/index.html"><link rel="alternate" hreflang="es" href="https://behrouziquantlab.github.io/es/index.html"><link rel="alternate" hreflang="pt" href="https://behrouziquantlab.github.io/pt/index.html"><link rel="alternate" hreflang="tr" href="https://behrouziquantlab.github.io/tr/index.html"><link rel="alternate" hreflang="zh-cn" href="https://behrouziquantlab.github.io/zh-cn/index.html"><style>body{background:#070B14;color:#E6EDF7;font:16px system-ui;display:grid;place-items:center;min-height:90vh}a{color:#2DD4BF;margin:0 8px}</style><script>/* BQL language selection for the site ROOT only (deep pages never redirect).
+   Order: 1) language the visitor chose before (localStorage bql_lang)  2) this session's detection (sessionStorage)
+          3) country from IP via a free geolocation service (country code only is read; nothing is stored or sent elsewhere)
+          4) browser language  5) English.   Test hook: ?cc=DE simulates a country without any network call. */
+(function () {
+  var LANGS = ['en', 'fa', 'de', 'fr', 'es', 'pt', 'tr', 'zh-cn'];
+  var C = { fa: 'IR AF TJ', de: 'DE AT CH LI', fr: 'FR BE MC LU SN CI CM ML BF NE TG BJ GA CG CD MG HT GN TD CF DJ KM RW BI NC PF RE GP MQ GF YT PM WF MA DZ TN',
+            es: 'ES MX AR CO CL PE VE EC GT CU BO DO HN PY SV NI CR PA UY PR GQ', pt: 'PT BR AO MZ CV GW ST TL', tr: 'TR', 'zh-cn': 'CN' };
+  var MAP = {}; for (var l in C) C[l].split(' ').forEach(function (c) { MAP[c] = l; });
+  function ok(l) { return LANGS.indexOf(l) >= 0; }
+  function go(l, why) { try { sessionStorage.setItem('bql_auto', l); } catch (e) {} document.documentElement.setAttribute('data-why', why); location.replace(l + '/index.html'); }
+  function browser() { var b = (navigator.languages && navigator.languages[0]) || navigator.language || 'en'; b = b.toLowerCase(); if (b.indexOf('zh') === 0) return 'zh-cn'; b = b.slice(0, 2); return ok(b) ? b : 'en'; }
+  var saved = null; try { saved = localStorage.getItem('bql_lang') || sessionStorage.getItem('bql_auto'); } catch (e) {}
+  var q = /[?&]cc=([A-Za-z]{2})/.exec(location.search);
+  if (q) return go(MAP[q[1].toUpperCase()] || browser(), 'test-country');
+  if (saved && ok(saved)) return go(saved, 'saved');
+  function geo(url, pick, next) {
+    var done = false, t = setTimeout(function () { if (!done) { done = true; next(); } }, 1500);
+    fetch(url, { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' }).then(function (r) { return r.json(); }).then(function (j) {
+      if (done) return; done = true; clearTimeout(t); var cc = (pick(j) || '').toUpperCase(); if (MAP[cc]) go(MAP[cc], 'country'); else go(browser(), 'browser'); })
+      .catch(function () { if (!done) { done = true; clearTimeout(t); next(); } });
+  }
+  if (!window.fetch) return go(browser(), 'browser');
+  geo('https://api.country.is/', function (j) { return j.country; }, function () {
+    geo('https://get.geojs.io/v1/ip/country.json', function (j) { return j.country; }, function () { go(browser(), 'browser'); });
+  });
+})();
+</script><p><a href="en/index.html" lang="en" onclick="try{localStorage.setItem('bql_lang','en')}catch(e){}">English</a> · <a href="fa/index.html" lang="fa" onclick="try{localStorage.setItem('bql_lang','fa')}catch(e){}">فارسی</a> · <a href="de/index.html" lang="de" onclick="try{localStorage.setItem('bql_lang','de')}catch(e){}">Deutsch</a> · <a href="fr/index.html" lang="fr" onclick="try{localStorage.setItem('bql_lang','fr')}catch(e){}">Français</a> · <a href="es/index.html" lang="es" onclick="try{localStorage.setItem('bql_lang','es')}catch(e){}">Español</a> · <a href="pt/index.html" lang="pt" onclick="try{localStorage.setItem('bql_lang','pt')}catch(e){}">Português</a> · <a href="tr/index.html" lang="tr" onclick="try{localStorage.setItem('bql_lang','tr')}catch(e){}">Türkçe</a> · <a href="zh-cn/index.html" lang="zh-cn" onclick="try{localStorage.setItem('bql_lang','zh-cn')}catch(e){}">简体中文</a></p></html>
