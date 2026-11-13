@@ -129,3 +129,14 @@
     if (items) pop.innerHTML = items;
   }).catch(function () {});
 })();
+
+/* v6 (2026-11-13): mobile/tablet menu — accessible toggle, closes on link click, Escape or outside click */
+(function(){
+  var top=document.querySelector('header.top'), btn=top&&top.querySelector('.menu'); if(!btn) return;
+  function set(o){top.classList.toggle('open',o);btn.setAttribute('aria-expanded',o?'true':'false');document.documentElement.classList.toggle('menu-open',o);}
+  btn.addEventListener('click',function(e){e.stopPropagation();set(!top.classList.contains('open'));});
+  top.querySelectorAll('#mainnav a').forEach(function(a){a.addEventListener('click',function(){set(false);});});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});
+  document.addEventListener('click',function(e){if(top.classList.contains('open')&&!top.contains(e.target))set(false);});
+  window.addEventListener('resize',function(){if(window.innerWidth>1100)set(false);});
+})();
