@@ -3,6 +3,14 @@
    locks the gold point after the disclosed delay. Data are simulated and labelled as such on the page.
    Progressive enhancement: the identical SVG poster stays visible without WebGL/JS, with reduced motion or data saver.
    Paused off-screen and on hidden tabs; resources released on context loss. */
+(function () {                                                    // scroll story: the active step decides how far the chart has been built
+  var frame = document.querySelector('[data-story]'); if (!frame || !('IntersectionObserver' in window)) return;
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.s8-step'));
+  function set(n) { for (var k = 1; k <= 5; k++) frame.classList.toggle('show-' + k, k <= n); steps.forEach(function (s, i) { s.classList.toggle('on', i + 1 === n); }); }
+  set(1); var sec = frame.closest('.s8'); if (sec) sec.classList.add('s8-live');   // without JS every step stays fully visible
+  var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) set(+en.target.getAttribute('data-step')); }); }, { rootMargin: '-42% 0px -42% 0px' });
+  steps.forEach(function (s) { io.observe(s); });
+})();
 (function () {
   var canvases = document.querySelectorAll('canvas[data-engine3d]');
   if (!canvases.length || !window.WebGLRenderingContext) return;
@@ -29,7 +37,7 @@
     var D; try { D = JSON.parse(cv.getAttribute('data-engine3d')); } catch (e) { return; }
     var gl = cv.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true }) || cv.getContext('experimental-webgl');
     if (!gl) return;
-    var box = cv.parentNode, tags = {}, n = D.n;
+    var box = cv.parentNode, tags = {}, n = D.n, shift = parseFloat(cv.getAttribute('data-shift')) || 0;   // full-bleed hero: scene beside the headline
     box.querySelectorAll('[data-tag]').forEach(function (el) { tags[el.getAttribute('data-tag')] = el; });
 
     // ---- shaders
@@ -111,8 +119,8 @@
     function draw(now) {
       raf = 0; if (!t0) t0 = now; var t = now - t0;
       px += (tx - px) * .06; py += (ty - py) * .06;
-      var drift = t > 4600 ? Math.sin((t - 4600) / 2200) * .25 : 0, a = W / H, dist = Math.max(14.2, (a < 1.3 ? 18.5 : 23.5) / a);   // phones: crop the edges slightly rather than shrink the scene
-      M = mul(persp(30 * Math.PI / 180, a, .5, 60), look(.9 + px * 2.2 + drift, 4.6 - py * 1.2, dist, .15, -.35, -2.4));   // elevated, slightly oblique: the four engines read as depth
+      var drift = t > 4600 ? Math.sin((t - 4600) / 2200) * .25 : 0, a = W / H, sh = a > 1.3 ? shift : 0, dist = Math.max(14.2, (a < 1.3 ? 18.5 : 23.5) / a) * (sh ? 1.7 : 1);   // phones: crop the edges slightly rather than shrink the scene
+      M = mul(persp(30 * Math.PI / 180, a, .5, 60), look(.9 + px * 2.2 + drift - sh, 4.6 - py * 1.2, dist, .15 - sh, -.35, -2.4));   // elevated, slightly oblique: the four engines read as depth
       var R = ease((t - 150) / 2300), BG = ease((t - 900) / 1500), C = ease((t - 2600) / 700), G = clamp((t - 3350) / 520);
       gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       for (var i = 0; i < objs.length; i++) {
