@@ -390,3 +390,4 @@ footer a{transition:color .2s ease}footer a:hover{color:var(--accent);text-decor
 @media (prefers-reduced-motion:reduce){.card:hover,.mkcard:hover{transform:none}.top.open nav#mainnav{animation:none}.menu i{transition:none}}
 [dir=rtl] .btn span[aria-hidden=true]{display:inline-block;transform:scaleX(-1)}
 @media (min-width:641px){.h1row{flex-wrap:nowrap}.pbname{font-size:clamp(40px,5.2vw,78px)}}
+@media (max-width:640px){.stage3d .float{position:static!important;display:inline-block;transform:none!important;margin:8px 6px 0 0;max-width:none;white-space:normal}[dir=rtl] .stage3d .float{margin:8px 0 0 6px}}
