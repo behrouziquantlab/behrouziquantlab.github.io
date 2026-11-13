@@ -37,7 +37,21 @@
 | Corner radius | 14 px cards, 10 px controls |
 | Section rhythm | 56 px vertical padding |
 | Grid | 3 → 2 → 1 columns at 900 px and 600 px |
-| Motion | smooth scroll and hover brightness only; no decorative animation |
+| Motion | purposeful only: one signature 3D/motion moment per page, quiet everywhere else (see Motion) |
+
+## Motion (v2)
+Motion explains the product. It never decorates.
+
+| Allowed | Not allowed |
+|---|---|
+| One signature scene per page that shows the method (noise → divergence → confirmation) | Ambient floating shapes, particles or glow with no meaning |
+| Section reveals, hover and focus feedback, line-drawing of real or labelled sample charts | Bounce, shake, autoplay loops on text, parallax on body text |
+| Scroll-linked explanation on desktop; a simple stacked version on mobile | Scroll hijacking, or content that only appears through animation |
+| Gold confirmation point "locking" as the strongest beat | Gold or `--up`/`--dn` used for decoration |
+
+- **Easing:** `cubic-bezier(.2,.7,.2,1)` enter, `cubic-bezier(.65,0,.35,1)` transitions. Calm and damped, no overshoot except the confirmation point.
+- **Durations:** 120–200 ms interaction, 500–800 ms reveal, hero intro ≤ 1.6 s of reading time.
+- **Required:** `prefers-reduced-motion` gives a still frame, the page works without WebGL/JS, loops pause off-screen, and simulated visuals are labelled "simulated".
 
 ## Voice
 - Say what the tool does and what it does not do.
